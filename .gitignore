@@ -1,2 +1,4 @@
 *.pdb
 *.exe
+my-project/
+project/target/
