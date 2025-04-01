@@ -1,4 +1,5 @@
 use std::io;
+use std::result::Result;
 
 fn main() {
     let mut fisrt_input = String::new();
@@ -21,20 +22,31 @@ fn main() {
     println!("Choose operation: +, -, *, /:");
     io::stdin().read_line(&mut operation).expect("failed");
 
+    let result = operate(first_number, second_number, operation);
+    if !result.is_err() {
+        println!("The result is: {}", result.unwrap());
+    }
+}
+
+
+/// This function takes inputs of user - (two numbers and an operation) and returns the result of the operation.
+fn operate(first_number: i32, second_number: i32, operation: String) -> Result<i32, bool> {
     //check the operaion type
     if operation.trim() == "+" {
-        println!("Answer:{}", first_number + second_number);
+        return Result::Ok(first_number + second_number);
     } else if operation.trim() == "-" {
-        println!("Answer:{}", first_number - second_number);
+        return Result::Ok(first_number - second_number);
     } else if operation.trim() == "*" {
-        println!("Answer:{}", first_number * second_number);
+        return Result::Ok(first_number * second_number);
     } else if operation.trim() == "/" {
         if second_number != 0 {
-            println!("Answer:{}", first_number / second_number);
+            return Result::Ok(first_number / second_number);
         } else {
             println!("You cant divide by 0");
+            return Result::Err(false);
         }
     } else {
         println!("false, the operations options are: +, -, *, /");
+        return Result::Err(false);
     }
 }
