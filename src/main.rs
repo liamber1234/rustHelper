@@ -1,9 +1,10 @@
 use std::process::exit;
+use std::result::Result;
 use std::io;
 use rand::Rng; // 0.8.5
 
-const MINIMUM_NUMBER: i32 = 1;
-const MAXIMUM_NUMBER: i32 = 101;
+const MINIMUM_NUMBER: i32 = 1; // Minimum guess number
+const MAXIMUM_NUMBER: i32 = 101; // Maximum guess number
 
 fn main() {
     let mut random_guess = String::new();    
@@ -15,11 +16,18 @@ fn main() {
         let input_number: i32 = random_guess.trim().parse().expect("Please enter a number");
         random_guess.clear();
         check_range(input_number);
-        check_guess(input_number, random);
+        let result = check_guess(input_number, random);
+        if result.is_ok() {
+            println!("You guessed the number!");
+            break;
+        } else {
+            println!("{}", result.unwrap_err());
+        }
+        println!("Try again!");
     }   
 }
 
-// Function to check if the guess is in the valid range
+/// Function to check if the guess is in the valid range
 fn check_range(guess : i32) {
     if guess < MINIMUM_NUMBER || guess >= MAXIMUM_NUMBER {
         println!("Number is not in the correct range - bye bye");
@@ -27,14 +35,13 @@ fn check_range(guess : i32) {
     }
 }
 
-// Function to check if the guess is correct
-fn check_guess(guess: i32, random: i32) {
+/// Function to check if the guess is correct
+fn check_guess(guess: i32, random: i32) -> Result<(), String> {
     if guess == random {
-        println!("You guessed the number!");
-        exit(0);
+        return Result::Ok(());
     } else if guess < random {
-        println!("Your guess is too low");
+        return Result::Err("Your guess is too low".to_string());
     } else {
-        println!("Your guess is too high");
+        return Result::Err("Your guess is too high".to_string());
     }
 }
