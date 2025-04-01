@@ -1,2 +1,4 @@
 *.pdb
 my-project/
+project/target
+.gitconfig
