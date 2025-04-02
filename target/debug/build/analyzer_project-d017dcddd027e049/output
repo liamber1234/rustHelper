@@ -1,0 +1,2 @@
+cargo:rustc-link-search=native=C:/Users/liamb/rustHelper/library
+cargo:rustc-link-lib=static=analyzer_lib
