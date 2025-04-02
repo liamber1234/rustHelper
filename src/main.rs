@@ -1,5 +1,4 @@
-pub mod analyzer;
-use analyzer::Analyzer;
+use analyzer_project::Analyzer::Analyzer;
 
 const TEXT_INSERT: &str = "1";
 const WORD_COUNT: &str = "2";
@@ -10,9 +9,9 @@ fn main() {
     loop {
         print_menu();
         let mut choice = String::new();
-        if  std::io::stdin().read_line(&mut choice) == Err(e) {
-            eprintln!("Failed to read input: {}", e);
-            break;;
+        if std::io::stdin().read_line(&mut choice).is_err() {
+            eprintln!("Failed to read input");
+            break;
         }
         match choice.trim() {
             TEXT_INSERT => {
@@ -42,8 +41,8 @@ fn main() {
 fn insert_text(analyzer: &mut Analyzer) {
     println!("Please enter a text to analyze:");
     let mut text = String::new();
-    if std::io::stdin().read_line(&mut text) == Err(e) {
-        eprintln!("Failed to read input: {}", e);
+    if std::io::stdin().read_line(&mut text).is_err() {
+        eprintln!("Failed to read input", );
         return;
     }
     analyzer.add_text(&text);
@@ -57,8 +56,8 @@ fn insert_text(analyzer: &mut Analyzer) {
 fn get_word_count(analyzer: &mut Analyzer) {
     println!("Please enter a word to count:");
     let mut word = String::new();
-    if std::io::stdin().read_line(&mut word) == Err(e) {
-        eprintln!("Failed to read input: {}", e);
+    if std::io::stdin().read_line(&mut word).is_err() {
+        eprintln!("Failed to read input");
         return;
     }
     let word = word.trim();
