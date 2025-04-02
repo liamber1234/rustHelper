@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+/// this struct is a text analyzer, it holds dictionary of words and their counts
 pub struct Analyzer {
     words : HashMap<String, usize>,
 }
@@ -11,7 +12,7 @@ impl Analyzer {
         }
     }
 
-    ///this function takes a string, counts the apearances of each word and stores them in a hashmap
+    /// this function takes a string, counts the apearances of each word and stores them in a hashmap
     /// parameters:
     /// - text: a string slice that contains the text to analyze
     /// returns:
@@ -23,7 +24,7 @@ impl Analyzer {
         }
     }
 
-    ///this function gets a word and returns the amount of times this word has been appeared
+    /// this function gets a word and returns the amount of times this word has been appeared
     /// parameters:
     /// - word: a string slice that contains the word to count
     /// returns:
