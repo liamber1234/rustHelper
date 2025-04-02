@@ -1,7 +1,4 @@
-use std::process::exit;
-use std::result::Result;
-use std::cmp::Ordering;
-use std::io;
+use std::{process::exit, result::Result, cmp::Ordering, io};
 use rand::Rng; // 0.8.5
 
 /// Minimum guess number
@@ -22,23 +19,21 @@ fn main() {
         let mut result = check_range(input_number);
         match result {
             Ok(_) => {},
-            Err(ref e) => {
-                println!("{}", result.unwrap_err());
+            Err(e) => {
+                println!("{}", e);
                 break;
             }
         }
 
         result = check_guess_correct(input_number, random);
-        match result {
-            Ok(_) => {
-                println!("You guessed the number!");
-                break;
-            },
-            Err(ref e) => {
-                println!("{}", result.unwrap_err());
-            }
+        result = result.map_err(|e| {
+            println!("{}", e);
+            e
+        });
+        if result.is_ok() {
+            println!("You guessed the number!");
+            break;
         }
-        println!("Try again!");
     }   
 }
 
@@ -51,7 +46,7 @@ fn check_range(guess : i32) -> Result<(), String> {
     if guess < MINIMUM_NUMBER || guess >= MAXIMUM_NUMBER {
         return Result::Err("Number is not in the correct range - bye bye".to_string());
     }
-    return Result::Ok(());
+    Result::Ok(())
 }
 
 /// Function to check if the guess is correct
