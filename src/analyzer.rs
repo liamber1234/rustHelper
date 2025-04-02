@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 /// this struct is a text analyzer, it holds dictionary of words and their counts
 pub struct Analyzer {
-    words : HashMap<String, usize>,
+    pub words : HashMap<String, usize>,
 }
 
 impl Analyzer {
