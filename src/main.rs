@@ -13,25 +13,12 @@ fn main() {
             eprintln!("Failed to read input");
             break;
         }
-        match choice.trim() {
-            TEXT_INSERT => {
-                println!("Inserting text...");
-                insert_text(&mut analyzer);
-            }
-            WORD_COUNT => {
-                println!("Getting word count...");
-                get_word_count(&mut analyzer);
-            }
-            EXIT => {
-                println!("Exiting...");
-                break;
-            }
-            _ => {
-                println!("Invalid choice, please try again.");
-            }
+        if !do_analyzer_operaion(choice.as_str(), &mut analyzer) {
+            break;
         }
     }
 }
+
 
 /// this function inserts a text to the analyzer
 /// parameters:
@@ -41,10 +28,11 @@ fn main() {
 fn insert_text(analyzer: &mut Analyzer) {
     println!("Please enter a text to analyze:");
     let mut text = String::new();
-    if std::io::stdin().read_line(&mut text).is_err() {
-        eprintln!("Failed to read input", );
+    std::io::stdin().read_line(&mut text).map_err(|e| {
+        println!("Failed to read input");
         return;
-    }
+    });
+
     analyzer.add_text(&text);
 }
 
@@ -56,10 +44,11 @@ fn insert_text(analyzer: &mut Analyzer) {
 fn get_word_count(analyzer: &mut Analyzer) {
     println!("Please enter a word to count:");
     let mut word = String::new();
-    if std::io::stdin().read_line(&mut word).is_err() {
-        eprintln!("Failed to read input");
-        return;
-    }
+
+    std::io::stdin().read_line(&mut word).map_err(|e| {
+        println!("Failed to read input");
+    });
+
     let word = word.trim();
     let count = analyzer.get_word_count(&word);
     println!("{} times", count);
@@ -75,4 +64,33 @@ fn print_menu() {
     println!("1. Insert text");
     println!("2. Get word count");
     println!("3. Exit");
+}
+
+/// this function looks at the user input and calls to the right function
+/// parameters:
+/// - choice: the user input
+/// - analyzer: a mutable reference to the analyzer
+/// returns:
+/// - none
+fn do_analyzer_operaion(choice: &str, analyzer: &mut Analyzer) -> bool{ 
+    match choice.trim() {
+        TEXT_INSERT => {
+            println!("Inserting text...");
+            insert_text(analyzer);
+            return true;
+        }
+        WORD_COUNT => {
+            println!("Getting word count...");
+            get_word_count(analyzer);
+            return true;
+        }
+        EXIT => {
+            println!("Exiting...");
+            return false;
+        }
+        _ => {
+            println!("Invalid choice, please try again.");
+            return true;
+        }
+    }
 }
