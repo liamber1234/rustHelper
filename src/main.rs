@@ -1,7 +1,5 @@
-mod library;
-mod book;
-use crate::book::Book;
-use crate::library::Library;
+use library_project::library::Library;
+use library_project::book::Book;
 
 const OPERATIONS: [&str; 6] = ["Add Book", "Remove Book", "List Books", "Rent Book", "Return Book", "Exit"];
 

@@ -1,5 +1,4 @@
-mod book;
-use crate::book::Book;
+use crate ::book::Book;
 
 ///this struct represents a library and includes the librarian, books, and location of the library
 pub struct Library {
@@ -68,7 +67,6 @@ impl Library {
                     println!("The book is not available for rent.");
                     return;
                 }
-                return;
             }
         }
         println!("Book not found");
