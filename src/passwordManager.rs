@@ -1,28 +1,12 @@
 use regex::Regex;
 use thiserror::Error;
+use crate::PasswordError::PasswordError;
 
 /// Minimum password length
 const MINIMUM_LENGTH: usize = 8;
 
 /// Maximum password length
 const MAXIMUM_LENGTH: usize = 16;
-
-
-#[derive(Error, Debug, PartialEq)]
-pub enum PasswordError {
-    #[error("Password isn't in the valid length")]
-    InvalidLength,
-
-    #[error("Passowrd isn't including a capital letter")]
-    MissingCapital,
-
-    #[error("Password isn't including a small letter")]
-    MissingSmall,
-
-    #[error("Password isn't including a number")]
-    MissingNumber,
-}
-
 
 pub fn check_password_correct(password: &str) -> Result<(), PasswordError> {
     if !valid_length(password) {
