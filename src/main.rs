@@ -1,8 +1,11 @@
 use analyzer_project::Analyzer::Analyzer;
 
-const TEXT_INSERT: &str = "1";
-const WORD_COUNT: &str = "2";
-const EXIT: &str = "3";
+/// this enum is representing the operations that the user can choose from
+enum AnalyzerOperation {
+    TEXT_INSERT,
+    WORD_COUNT,
+    EXIT,
+}
 
 fn main() {
     let mut analyzer = Analyzer::new();
@@ -13,7 +16,7 @@ fn main() {
             eprintln!("Failed to read input");
             break;
         }
-        if !do_analyzer_operaion(choice.as_str(), &mut analyzer) {
+        if !do_analyzer_operaion(&convert_choice_to_operation(choice.as_str().trim()), &mut analyzer) {
             break;
         }
     }
@@ -72,19 +75,19 @@ fn print_menu() {
 /// - analyzer: a mutable reference to the analyzer
 /// returns:
 /// - none
-fn do_analyzer_operaion(choice: &str, analyzer: &mut Analyzer) -> bool{ 
-    match choice.trim() {
-        TEXT_INSERT => {
+fn do_analyzer_operaion(choice: &AnalyzerOperation, analyzer: &mut Analyzer) -> bool{ 
+    match choice {
+        AnalyzerOperation::TEXT_INSERT => {
             println!("Inserting text...");
             insert_text(analyzer);
             return true;
         }
-        WORD_COUNT => {
+        AnalyzerOperation::WORD_COUNT => {
             println!("Getting word count...");
             get_word_count(analyzer);
             return true;
         }
-        EXIT => {
+        AnalyzerOperation::EXIT => {
             println!("Exiting...");
             return false;
         }
@@ -92,5 +95,19 @@ fn do_analyzer_operaion(choice: &str, analyzer: &mut Analyzer) -> bool{
             println!("Invalid choice, please try again.");
             return true;
         }
+    }
+}
+
+/// this function converts the given string to an AnalyzerOperation
+/// parameters:
+/// - choice: the user input
+/// returns:
+/// - AnalyzerOperation: the operation to perform
+fn convert_choice_to_operation(choice: &str) -> AnalyzerOperation {
+    match choice {
+        "1" => AnalyzerOperation::TEXT_INSERT,
+        "2" => AnalyzerOperation::WORD_COUNT,
+        "3" => AnalyzerOperation::EXIT,
+        _ => AnalyzerOperation::EXIT,
     }
 }

@@ -20,7 +20,7 @@ impl Analyzer {
     pub fn add_text(&mut self, text: &str) {
         for word in text.split_whitespace() {
              // this line inserts a word to the hashmap, if it is exists it increases the count, and if not adds a new one
-            self.words.insert(word.to_string(), self.words.get(word).unwrap_or(&0) + 1);
+            self.words.insert(word.to_string(), self.get_word_count(word) + 1);
         }
     }
 
