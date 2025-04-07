@@ -3,41 +3,12 @@ use CoffeProj::Coffe::CoffeSize;
 use CoffeProj::Coffe::CoffeType;
 
 fn main() {
-    let mut user_input = String::new();
     let mut sugar_amount = 0;
-    let coffee_type = CoffeType::Espresso;
     let mut coffee_size;
     
-    loop {
-        print_type_menu();
-        user_input.clear();
-        if std::io::stdin().read_line(&mut user_input).is_err()
-        {
-            println!("Error reading input. Please try again.");
-            continue;
-        }
-        let coffee_type_input = user_input.trim();
-        
-        if convert_to_type(coffee_type_input).is_none() {
-            println!("Invalid coffee type. Please try again.");
-            continue;
-        }
-
-        print_size_menu();
-        user_input.clear();
-        if !std::io::stdin().read_line(&mut user_input).is_ok() {
-            println!("Error reading input. Please try again.");
-            continue;
-        }
-        let coffee_size_input = user_input.trim();
-
-        if let Some(size) = convert_to_size(coffee_size_input) {
-            coffee_size = size;  
-        } else {
-            println!("Invalid coffee size. Please try again.");
-            continue;
-        }
-
+    loop {        
+        let coffe_type = handle_type_input();
+        let coffe_size = handle_size_input();
         let sugar_result = handle_sugar_input();
 
         let is_containg_sugar = sugar_result.is_some();
@@ -48,7 +19,7 @@ fn main() {
             };
         }
         
-        let order = CoffeOrder::new(coffee_type, coffee_size, is_containg_sugar, Some(sugar_amount));
+        let order = CoffeOrder::new(coffe_type, coffee_size, is_containg_sugar, Some(sugar_amount));
         order.print_order();
     }
 }
@@ -106,6 +77,49 @@ fn convert_to_size(coffee_size_input: &str) -> Option<CoffeSize> {
         "2" => Some(CoffeSize::Medium),
         "3" => Some(CoffeSize::Large),
         _ => None,
+    }
+}
+
+fn handle_type_input() -> CoffeType {
+    let mut user_input = String::new();
+
+    loop {
+        print_type_menu();
+        user_input.clear();
+        if std::io::stdin().read_line(&mut user_input).is_err()
+        {
+            println!("Error reading input. Please try again.");
+            continue;
+        }
+        
+        let coffe_type = convert_to_type(user_input.trim());
+        if coffe_type.is_none() {
+            println!("Invalid coffee type. Please try again.");
+            continue;
+        }
+
+        return coffe_type.unwrap()
+    }
+}
+
+handle_size_input() -> CoffeSize {
+    let mut user_input = String::new();
+
+    loop {
+        print_size_menu();
+        user_input.clear();
+        if std::io::stdin().read_line(&mut user_input).is_err() {
+            println!("Error reading input. Please try again.");
+            continue;
+        }
+        
+        let coffee_size = convert_to_size(user_input.trim());
+        if coffee_size.is_none() {
+            println!("Invalid coffee size. Please try again.");
+            continue;
+        }
+
+        return coffee_size.unwrap()
     }
 }
 

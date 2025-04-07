@@ -1,4 +1,5 @@
 #[derive(Debug, Clone, Copy)]
+/// CoffeType enum represents different types of coffee.
 pub enum CoffeType {
     Espresso,
     Latte,
@@ -7,12 +8,14 @@ pub enum CoffeType {
 }
 
 #[derive(Debug, Clone, Copy)]
+/// CoffeSize enum represents different sizes of coffee.
 pub enum CoffeSize {
     Small,
     Medium,
     Large,
 }
 
+/// CoffeOrder struct represents a coffee order.
 pub struct CoffeOrder {
     pub coffee_type: CoffeType,
     pub coffee_size: CoffeSize,
