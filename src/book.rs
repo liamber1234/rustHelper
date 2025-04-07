@@ -1,3 +1,5 @@
+use std::fmt;
+
 ///struct which represents a book and includes the title, author, and availability status of the book.
 pub struct Book {
     pub title: String,
@@ -23,13 +25,15 @@ impl Book {
         }
     }
 
-    ///this function prints the information of the book
-    /// parameters:
-    /// - none
-    /// returns:
-    /// - none
-    pub fn print_book_info(&mut self) {
-        println!("Title: {}, Author: {}, Avalablity: {}", self.title, self.author, self.is_avalible);
-    }
 }
 
+///this function prints the information of the book
+/// parameters:
+/// - none
+/// returns:
+/// - none
+impl fmt::Display for Book {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Title: {}, Author: {}, Availability: {}", self.title, self.author, self.is_avalible)
+    }
+}

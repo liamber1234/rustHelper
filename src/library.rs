@@ -37,7 +37,7 @@ impl Library {
     /// returns:
     /// - none
     pub fn remove_book(&mut self, book: Book) {
-        self.books.remove(self.find_index(&book).try_into().unwrap());
+        self.books.remove(self.find_index(&book) as usize);
     }
     
     ///this function lists all the books in the library
@@ -45,9 +45,9 @@ impl Library {
     /// - none
     /// returns:
     /// - none
-    pub fn list_books(&mut self) {
-        for book in &mut self.books {
-            book.print_book_info();
+    pub fn list_books(&self) {
+        for book in &self.books {
+            format!("{}", book);
         }
     }
     
@@ -56,36 +56,33 @@ impl Library {
     /// - title: a string which represents the title of the book to rent
     /// returns:
     /// - none
-    pub fn rent_book(&mut self, title : &str) {
+    pub fn rent_book(&mut self, title : &str) -> bool {
         for book in &mut self.books {
             if book.title == title {
                 if book.is_avalible {
                     book.is_avalible = false;
-                    println!("You have rented the book: {}", book.title);
-                    return;
+                    return true;
                 } else {
-                    println!("The book is not available for rent.");
-                    return;
+                    return false;
                 }
             }
         }
-        println!("Book not found");
+        return false;
     }
-    
+
     ///this function returns a book to the library
     /// parameters:
     /// - title: a string which represents the title of the book to return
     /// returns:
     /// - none
-    pub fn return_book(&mut self, title : &str) {
+    pub fn return_book(&mut self, title : &str) -> bool{
         for book in &mut self.books {
             if book.title == title {
                 book.is_avalible = true;
-                println!("You have returned the book: {}", book.title);
-                return;
+                return true;
             }
         }
-        println!("Book not found");
+        return false;
     }
 
     ///this function finds index of a book in the library
@@ -94,9 +91,9 @@ impl Library {
     /// returns:
     /// - i32: the index of the book in the library
     pub fn find_index(&self, book: &Book) -> i32 {
-        for (i, b) in self.books.iter().enumerate() {
-            if b.title == book.title && b.author == book.author {
-                return i as i32;
+        for inedx in 0..self.books.len() {
+            if self.books[inedx].title == book.title {
+                return inedx as i32;
             }
         }
         return -1;

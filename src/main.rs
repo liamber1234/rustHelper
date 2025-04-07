@@ -1,7 +1,11 @@
 use library_project::library::Library;
 use library_project::book::Book;
 
-const OPERATIONS: [&str; 6] = ["Add Book", "Remove Book", "List Books", "Rent Book", "Return Book", "Exit"];
+/// the index of the back to menu option
+const MENU_INDEX : i32 = 5;
+
+/// array of all the posible operaions as user
+const OPERATIONS: [&str; 7] = ["Add Book", "Remove Book", "List Books", "Rent Book", "Return Book", "Back to menu","Exit"];
 
 enum operation{
     ADD_BOOK = 1,
@@ -9,6 +13,7 @@ enum operation{
     LIST_BOOKS,
     RENT_BOOK,
     RETURN_BOOK,
+    BACK_TO_MENU,
     EXIT
 }
 
@@ -19,15 +24,12 @@ fn main() {
     loop {
         print_menu();
         input.clear();
-        match std::io::stdin().read_line(&mut input) {
-            Err(e) => {
-                println!("Error reading input: {}", e);
-                return; // Exit the program on error
-            }
-            Ok(_) => {}
-        }
+        std::io::stdin().read_line(&mut input).map_err(|e| {
+            println!("Error reading input: {}", e);
+            return;
+        }).ok();
                 
-        let user_choice: operation = convert_to_operation(input.trim().parse().unwrap_or(0)); // Default to 0 if parsing fails
+        let user_choice: operation = convert_to_operation(input.trim().parse().unwrap_or(MENU_INDEX)); // Default to 0 if parsing fails
 
 
         match user_choice {
@@ -36,6 +38,10 @@ fn main() {
             operation::LIST_BOOKS => list_books(&mut library),
             operation::RENT_BOOK => rent_book(&mut library),
             operation::RETURN_BOOK => return_book(&mut library),
+            operation::BACK_TO_MENU => {
+                println!("Going back to the menu...");
+                continue;
+            }
             operation::EXIT => {
                 println!("Exiting the program.");
                 break;
@@ -85,8 +91,7 @@ fn input_new_book() -> Book {
         return input_new_book(); // Recursively prompt for a valid author
     }
 
-    let book = Book::new(title, author, true);
-    return book;
+    return Book::new(title, author, true);
 }
 
 /// this function adds a book to the library
@@ -156,6 +161,7 @@ fn convert_to_operation(input: i32) -> operation {
         3 => operation::LIST_BOOKS,
         4 => operation::RENT_BOOK,
         5 => operation::RETURN_BOOK,
-        _ => operation::EXIT,
+        6 => operation::EXIT,
+        _ => operation::BACK_TO_MENU,
     }
 }
