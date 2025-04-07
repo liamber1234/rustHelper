@@ -1,5 +1,5 @@
-use std::{process::exit, result::Result, cmp::Ordering, io};
-use rand::Rng; // 0.8.5
+use rand::Rng;
+use std::{cmp::Ordering, io, result::Result}; // 0.8.5
 
 /// Minimum guess number
 const MINIMUM_NUMBER: i32 = 1;
@@ -8,7 +8,7 @@ const MINIMUM_NUMBER: i32 = 1;
 const MAXIMUM_NUMBER: i32 = 101;
 
 fn main() {
-    let mut random_guess = String::new();    
+    let mut random_guess = String::new();
     let random = rand::thread_rng().gen_range(MINIMUM_NUMBER..MAXIMUM_NUMBER);
 
     loop {
@@ -18,7 +18,7 @@ fn main() {
         random_guess.clear();
         let mut result = check_range(input_number);
         match result {
-            Ok(_) => {},
+            Ok(_) => {}
             Err(e) => {
                 println!("{}", e);
                 break;
@@ -26,15 +26,17 @@ fn main() {
         }
 
         result = check_guess_correct(input_number, random);
-        result = result.map_err(|e| {
-            println!("{}", e);
-            e
-        });
-        if result.is_ok() {
-            println!("You guessed the number!");
-            break;
+        match result {
+            Ok(_) => {
+                println!("You guessed the number!");
+                break;
         }
-    }   
+            Err(e) => {
+                println!("{}", e);
+                continue;
+            }
+        }
+    }
 }
 
 /// Function to check if the guess is in the valid range
@@ -42,7 +44,7 @@ fn main() {
 /// - guess: the number to check
 /// returns:
 /// - none
-fn check_range(guess : i32) -> Result<(), String> {
+fn check_range(guess: i32) -> Result<(), String> {
     if guess < MINIMUM_NUMBER || guess >= MAXIMUM_NUMBER {
         return Result::Err("Number is not in the correct range - bye bye".to_string());
     }
@@ -60,5 +62,5 @@ fn check_guess_correct(guess: i32, random: i32) -> Result<(), String> {
         Ordering::Equal => return Result::Ok(()),
         Ordering::Less => return Result::Err("Your guess is too low".to_string()),
         Ordering::Greater => return Result::Err("Your guess is too high".to_string()),
-    }  
+    }
 }
