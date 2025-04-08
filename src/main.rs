@@ -4,7 +4,6 @@ use CoffeProj::Coffe::CoffeType;
 
 fn main() {
     let mut sugar_amount = 0;
-    let mut coffee_size;
     
     loop {        
         let coffe_type = handle_type_input();
@@ -19,7 +18,7 @@ fn main() {
             };
         }
         
-        let order = CoffeOrder::new(coffe_type, coffee_size, is_containg_sugar, Some(sugar_amount));
+        let order = CoffeOrder::new(coffe_type, coffe_size, Some(sugar_amount));
         order.print_order();
     }
 }
@@ -43,12 +42,17 @@ fn print_type_menu() {
 /// returns:
 /// - Some(CoffeType) if the input is valid
 /// - None if the input is invalid
-fn convert_to_type(coffee_type_input: &str) -> Option<CoffeType> {
-    match coffee_type_input.trim() {
-        "1" => Some(CoffeType::Espresso),
-        "2" => Some(CoffeType::Latte),
-        "3" => Some(CoffeType::Cappuccino),
-        "4" => Some(CoffeType::Americano),
+fn convert_to_type(coffee_type_input: i32) -> Option<CoffeType> {
+    const ESPRESSO: i32 = CoffeType::Espresso as i32;
+    const LATTE: i32 = CoffeType::Latte as i32;
+    const CAPPUCCINO: i32 = CoffeType::Cappuccino as i32;
+    const AMERICANO: i32 = CoffeType::Americano as i32;
+
+    match coffee_type_input {
+        ESPRESSO => Some(CoffeType::Espresso),
+        LATTE => Some(CoffeType::Latte),
+        CAPPUCCINO => Some(CoffeType::Cappuccino),
+        AMERICANO => Some(CoffeType::Americano),
         _ => None,
     }
 }
@@ -71,14 +75,20 @@ fn print_size_menu() {
 /// returns:
 /// - Some(CoffeSize) if the input is valid
 /// - None if the input is invalid
-fn convert_to_size(coffee_size_input: &str) -> Option<CoffeSize> {
-    match coffee_size_input.trim() {
-        "1" => Some(CoffeSize::Small),
-        "2" => Some(CoffeSize::Medium),
-        "3" => Some(CoffeSize::Large),
+fn convert_to_size(coffee_size_input: i32) -> Option<CoffeSize> {
+    const SMALL: i32 = CoffeSize::Small as i32;
+    const MEDIUM: i32 = CoffeSize::Medium as i32;
+    const LARGE: i32 = CoffeSize::Large as i32;
+
+    match coffee_size_input {
+        SMALL => Some(CoffeSize::Small),
+        MEDIUM => Some(CoffeSize::Medium),
+        LARGE => Some(CoffeSize::Large),
         _ => None,
     }
 }
+
+
 
 fn handle_type_input() -> CoffeType {
     let mut user_input = String::new();
@@ -88,13 +98,19 @@ fn handle_type_input() -> CoffeType {
         user_input.clear();
         if std::io::stdin().read_line(&mut user_input).is_err()
         {
-            println!("Error reading input. Please try again.");
+            println!("Error reading input, Please try again.");
             continue;
         }
         
-        let coffe_type = convert_to_type(user_input.trim());
+        let user_input_number = user_input.trim().parse::<i32>();
+        if user_input_number.is_err() {
+            println!("Invalid input, Please enter a number.");
+            continue;
+        }
+
+        let coffe_type = convert_to_type(user_input_number.expect("Invalid input"));
         if coffe_type.is_none() {
-            println!("Invalid coffee type. Please try again.");
+            println!("Invalid coffee type, Please try again.");
             continue;
         }
 
@@ -102,7 +118,7 @@ fn handle_type_input() -> CoffeType {
     }
 }
 
-handle_size_input() -> CoffeSize {
+fn handle_size_input() -> CoffeSize {
     let mut user_input = String::new();
 
     loop {
@@ -112,8 +128,14 @@ handle_size_input() -> CoffeSize {
             println!("Error reading input. Please try again.");
             continue;
         }
+
+        let user_input_number = user_input.trim().parse::<i32>();
+        if user_input_number.is_err() {
+            println!("Invalid input. Please enter a number.");
+            continue;
+        }
         
-        let coffee_size = convert_to_size(user_input.trim());
+        let coffee_size = convert_to_size(user_input_number.expect("Invalid input"));
         if coffee_size.is_none() {
             println!("Invalid coffee size. Please try again.");
             continue;
