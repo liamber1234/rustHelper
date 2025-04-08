@@ -16,7 +16,7 @@ fn main() {
             eprintln!("Failed to read input");
             break;
         }
-        if !do_analyzer_operaion(&convert_choice_to_operation(choice.as_str().trim()), &mut analyzer) {
+        if do_analyzer_operaion(&convert_choice_to_operation(choice.as_str().trim()), &mut analyzer).is_err() {
             break;
         }
     }
@@ -75,25 +75,25 @@ fn print_menu() {
 /// - analyzer: a mutable reference to the analyzer
 /// returns:
 /// - none
-fn do_analyzer_operaion(choice: &AnalyzerOperation, analyzer: &mut Analyzer) -> bool{ 
+fn do_analyzer_operaion(choice: &AnalyzerOperation, analyzer: &mut Analyzer) -> Result<(), String> { 
     match choice {
         AnalyzerOperation::TEXT_INSERT => {
             println!("Inserting text...");
             insert_text(analyzer);
-            return true;
+            Ok(())
         }
         AnalyzerOperation::WORD_COUNT => {
             println!("Getting word count...");
             get_word_count(analyzer);
-            return true;
+            Ok(())
         }
         AnalyzerOperation::EXIT => {
             println!("Exiting...");
-            return false;
+            Err("Exiting program".to_string())
         }
         _ => {
             println!("Invalid choice, please try again.");
-            return true;
+            Ok(())
         }
     }
 }
